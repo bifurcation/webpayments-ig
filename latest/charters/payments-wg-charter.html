@@ -143,7 +143,7 @@ the <a href="#wpig">Web Payments Interest Group</a> description below.
 	<p>The Working Group will Recommend:</p>
 
   <ol>
-    <li>a set of messages,</li>
+    <li>a set of messages that can be used to accomplish a payment,</li>
     <li>message flows for the initiation and, where scheme-permitting, confirmation or
 completion of a payment, and</li>
     <li>an API to allow Web applications to participate in these flows.</li>
@@ -164,9 +164,12 @@ completion of a payment, and</li>
 	  <dt id="digital-payment-scheme"><strong>digital payment scheme</strong></dt>
 	  <dd>A set of rules for the execution of payment transactions that are followed by adhering entities (payment processors, payers and payees), where transactions take place over networks (such as the Web). Some digital payment schemes make use internally of payment instruments from other payment schemes. How they register and communicate with internal payment instruments is beyond the scope of this charter. </dd>
 	  <dt id="digital-payment-instrument"><strong>digital payment instrument</strong></dt>
-	  <dd>An account, token or other means of conducting a transaction according to a payment scheme, that is associated with a digital payment scheme.</dd>
+	  <dd>An account, token, or other means of fulfilling the payer's role in a digital payment scheme.</dd>
+    <!-- RLB: "Means of conducting a transaction" leaves me feeling unfulfilled.  Doesn't the instrument represent the payer/source side of the operation?  Where the application represents the payee side. -->
+    <!-- RLB: It seems like "payer" is wrong here.  I mean the bank, not the account holder.  Please insert the correct noun -->
 	  <dt id="digital-wallet"><strong>digital wallet</strong></dt>
-	  <dd>A container for digital payment instruments. A digital wallet affords access to digital payment instruments, but may not be the sole means of access. In this charter, a digital wallet is the means of registration and discovery of digital payment instruments. Whether digital wallets are used to implement other functionality described by this charter is an implementation detail. A digital wallet may be part of the user agent.</dd>
+	  <dd>A logical container for digital payment instruments. A digital wallet affords access to digital payment instruments, providing registration and discovery of digital payment instruments.  In this charter, a digital wallet is an entity that provides these functions by fulfilling the specified APIs for registration and discovery.  In many cases, the entity fulfilling the APIs will be a user agent, though the UA may ultimately locate payment instruments via other more specialized digital wallets.</dd>
+    <!-- RLB: Reading this again, it seems even more that we should just define that the UA acts as a digital wallet - since its major role is to provide access to payment instruments (!)  It may be that it provides that function by relying on *other* digital wallets, but it is playing that role nonetheless. -->
 </dl>
 
         <h3 id="capabilities">Required Capabilities</h3>
@@ -180,7 +183,7 @@ completion of a payment, and</li>
             <dd>
                 <ul>
                     <li>
-                      <strong>Registration</strong> of the payer's <a href="#digital-payment-instrument">digital payment instruments</a> with the user agent.</li>
+                      <strong>Registration</strong> of the payer's <a href="#digital-payment-instrument">digital payment instruments</a> with a digital wallet.</li>
                 </ul>
             </dd>
             <dt>Negotiation of Terms</dt>
@@ -204,18 +207,17 @@ completion of a payment, and</li>
                         local to
                         the payer.
                     </li>
-                    <li>
-                        <strong>Selection of a digital payment instrument</strong> by the payer and confirmation of the terms.</li>
+                        <!-- RLB: "Selection of a digital payment instrument" needs to get exposed to the application.  The UA needs to do this, but there's no API impact.  From the application's POV, it requests a payment instrument with certain criteria, and it gets one that meets those criteria.  Cf. the "csontraints" mechanism in getUserMedia, where you ask for a microphone or camera, and get what you ask for after the user selects what to provide. -->
 		    <li><strong>Payment Response</strong> from the digital payment instrument, which may vary according to digital payment scheme. For example, for a credit push instrument, the response may include a notification or proof of execution of the payment. For a debit pull instrument, the response may include the information necessary for the payee to execute the payment.</li>
                 </ul>
             </dd>
         </dl>
 
-		<p>The Working Group will consider support for
-		  deferred payment execution to enable use cases where
+		<p>These steps will execute asynchronously, to enable use cases where
 		  additional payee action is required or desired between
 		  "Payee selection of a digital payment instrument" and
 		  "Execution of payment."</p>
+    <!-- This is the Nth time we've done this (geolocation, notifications, webrtc, ...).  Make a promise/callback and call it a day. -->
 
         <p>The Working Group will also address exceptions that may occur during these steps, including payment authorization
           failure, lack of available <a href="#digital-payment-instrument">digital payment instruments</a>, and lack of suitable
@@ -223,8 +225,7 @@ completion of a payment, and</li>
 
 		<h3 id="digital_wallets">Digital Wallets</h3>
 
-		<p>The Working Group will Recommend an
-		  API to make it easier for a payer to choose a digital payment instrument (e.g., via a digital wallet) to make a payment from a Web application.</p>
+    <!-- RLB: Again, selection is a UX function, not an API function -->
 
 	  <p>The Working Group may define APIs that will also be used
    outside of a user agent context, such as between Web services, or
